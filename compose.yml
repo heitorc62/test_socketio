@@ -1,0 +1,33 @@
+version: "3"
+services:
+  flask:
+    build: ./flask_app
+    ports:
+      - "5000:5000"
+    volumes:
+      - "./flask_app:/test_app"
+      - "./test:/test_app/test"
+    networks:
+      - mynetwork
+    depends_on:
+      - redis
+
+  mqtt_service:
+    build: ./mqtt_service
+    volumes:
+      - "./mqtt_service:/test_mqtt_app"
+    networks:
+      - mynetwork
+    depends_on:
+      - redis
+
+  redis:
+    image: redis
+
+    ports:
+      - "6379:6379"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
