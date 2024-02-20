@@ -1,9 +1,4 @@
-from flask import Flask
 import redis, threading, json
-
-
-app = Flask(__name__)
-
 
 redis_client_sender = redis.Redis(host='redis', port=6379, db=2)
 
