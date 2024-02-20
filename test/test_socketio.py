@@ -1,6 +1,6 @@
 import unittest, json, time
 from app import create_app
-from app.extensions import socketio
+from extensions import socketio
 import eventlet
 
 

@@ -1,4 +1,4 @@
-from app.extensions import socketio
+from extensions import socketio
 import redis, eventlet, json
 
 def start_redis_listener():

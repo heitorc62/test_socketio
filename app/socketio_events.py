@@ -1,5 +1,5 @@
 
-from app.extensions import socketio
+from extensions import socketio
 from flask import Blueprint, request
 import json
 import redis, json

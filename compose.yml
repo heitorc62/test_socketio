@@ -1,12 +1,12 @@
 version: "3"
 services:
   flask:
-    build: ./flask_app
+    build: ./app
     ports:
       - "5000:5000"
     volumes:
-      - "./flask_app:/test_app"
-      - "./test:/test_app/test"
+      - "./app:/test_app"
+      - "./test:/test_app/test"  
     networks:
       - mynetwork
     depends_on:
