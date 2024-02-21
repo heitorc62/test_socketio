@@ -3,9 +3,8 @@ eventlet.monkey_patch()
 
 from flask import Flask
 from extensions import socketio
-from socketio_helper import start_redis_listener
-
-
+import redis, json
+from socketio_helper import process_device_update
 
 
 def create_app():
@@ -23,9 +22,19 @@ def create_app():
 
 app = create_app()
 
+def listen_for_redis_messages_from_mqtt_service():
+    redis_client = redis.Redis(host='redis', port=6379, db=2)
+    pubsub = redis_client.pubsub()
+    pubsub.subscribe('device_update')
 
-start_redis_listener()
+    for message in pubsub.listen():
+        if message['type'] == 'message':
+            # Deserialize the message data
+            channel = message['channel'].decode()
+            data = json.loads(message['data'])
+            if channel == 'device_update':
+                process_device_update(data)
 
-if __name__ == '__main__':
-    print("RUNNING!!!!")
-    socketio.run(app, host='0.0.0.0', port=5000, use_reloader=False, debug=True, allow_unsafe_werkzeug=True)
+
+
+eventlet.spawn(listen_for_redis_messages_from_mqtt_service)
